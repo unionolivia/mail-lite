@@ -9,9 +9,9 @@ use \PDO;
 class Connection{
     // Holds the class instance
     private static $instance = null;
-    private static $dsn = 'mysql:host=localhost;dbname=subs';
-    private static $username = 'root';
-    private static $password = '12345678';
+    private static $dsn = 'mysql:host=db4free.net;dbname=cinemas009';
+    private static $username = 'zxcvbnm111';
+    private static $password = 'zxcvbnm111';
 
     private function __construct(){
         try{
