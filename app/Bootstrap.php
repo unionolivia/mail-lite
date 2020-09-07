@@ -16,7 +16,7 @@ $environment = 'development';
 
 $whoops = new \Whoops\Run;
 if ($environment !== 'production') {
-    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    $whoops->pushHandler(new \Whoops\Handler\JsonResponseHandler);
 }
 else{
     $whoops->pushHandler(function($e){
@@ -27,11 +27,6 @@ else{
 $whoops->register();
 
 $injector = include('Dependencies.php');
-
-/*
-$request = $injector->make('Http\HttpRequest');
-$response = $injector->make('Http\HttpResponse');
-*/
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
@@ -68,27 +63,16 @@ switch($routeInfo[0]){
         $controller = $injector->make($controllerName);
         $response = $controller->$method($request, $vars);
     break;
-        
-   /*
-        $handler = $routeInfo[1][0];
-        $method = $routeInfo[1][1];
-        $vars = $routeInfo[2];
-        $class = $injector->make($handler);
-        $class->$method($vars);
-    break;
-    */
+    
 }
 
 
-/*
-foreach($response->getHeaders() as $header){
-	header($header, false);
-}
-echo $response->getContent();
-*/
-
-if (!$response instanceof \Symfony\Component\HttpFoundation\Response) {
+if (!$response instanceOf \Symfony\Component\HttpFoundation\Response) {
     throw new \Exception('Controller methods must return a Response object');
+}
+
+if ($response instanceOf \Auryn\InjectionException ){
+    throw new \Exception('Misspellings in Class names');
 }
 
 $response->prepare($request);
