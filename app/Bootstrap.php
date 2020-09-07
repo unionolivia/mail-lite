@@ -8,7 +8,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 
 error_reporting(E_ALL);
 
-$environment = 'production';
+$environment = 'development';
 
 /**
 *  Register the error handler
@@ -28,6 +28,10 @@ $whoops->register();
 
 $injector = include('Dependencies.php');
 
+/*
+$request = $injector->make('Http\HttpRequest');
+$response = $injector->make('Http\HttpResponse');
+*/
 
 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
 
@@ -64,7 +68,24 @@ switch($routeInfo[0]){
         $controller = $injector->make($controllerName);
         $response = $controller->$method($request, $vars);
     break;
+        
+   /*
+        $handler = $routeInfo[1][0];
+        $method = $routeInfo[1][1];
+        $vars = $routeInfo[2];
+        $class = $injector->make($handler);
+        $class->$method($vars);
+    break;
+    */
+}
 
+
+/*
+foreach($response->getHeaders() as $header){
+	header($header, false);
+}
+echo $response->getContent();
+*/
 
 if (!$response instanceof \Symfony\Component\HttpFoundation\Response) {
     throw new \Exception('Controller methods must return a Response object');
