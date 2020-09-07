@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Helpers;
 
@@ -22,7 +23,7 @@ class Helper
         //Add a dot to the end of the host name to make a fully qualified domain name
         // and get last array element because an escaped @ is allowed in the local part (RFC 5322)
         // Then convert to ascii (http://us.php.net/manual/en/function.idn-to-ascii.php)
-        $email_host = idn_to_ascii($email_host.'.');
+        $email_host = idn_to_ascii($email_host.'.', 0, INTL_IDNA_VARIANT_UTS46);
 
         //Check for MX pointers in DNS (if there are no MX pointers the domain cannot receive emails)
         if (!checkdnsrr($email_host, "MX")) {
